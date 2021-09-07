@@ -26,15 +26,27 @@
 // fe⇥ forEach loop
 // map⇥ map function
 
-const fetchData = async () => {
+const fetchData = async (searchTerm) => {
     const response = await axios.get('http://www.omdbapi.com/?', {
         params: {
             apikey: 'e1826389',
-            s: 'avengers',
+            s: searchTerm,
         },
     })
 
     console.log(response.data)
 }
 
-fetchData()
+const input = document.querySelector('input')
+
+let timeoutId
+const onInput = (ev) => {
+    if (timeoutId) {
+        clearTimeout(timeoutId)
+    }
+    timeoutId = setTimeout(() => {
+        fetchData(ev.target.value)
+    }, 1000)
+}
+
+input.addEventListener('input', onInput)
