@@ -1,3 +1,5 @@
+// cf⇥ const arrow function assignment
+
 // ae⇥ addEventListener
 // gi⇥ getElementById
 // gt⇥ getElementsByTagName
@@ -21,10 +23,16 @@
 // af⇥ arrow function (ES6)
 // f⇥ arrow function with body (ES6)
 // fr⇥ arrow function with return (ES6)
+
+// ra⇥ return new array
 // rp⇥ return Promise (ES6)
+// tf⇥ this
 
 // fe⇥ forEach loop
 // map⇥ map function
+
+// st⇥ setTimeout
+// si⇥ setInterval
 
 const fetchData = async (searchTerm) => {
     const response = await axios.get('http://www.omdbapi.com/?', {
@@ -39,14 +47,20 @@ const fetchData = async (searchTerm) => {
 
 const input = document.querySelector('input')
 
-let timeoutId
-const onInput = (ev) => {
-    if (timeoutId) {
-        clearTimeout(timeoutId)
+const debounce = (func, delay = 1000) => {
+    let timeoutId
+    return (...arg) => {
+        if (timeoutId) {
+            clearTimeout(timeoutId)
+        }
+        timeoutId = setTimeout(() => {
+            func.apply(null, arg)
+        }, delay)
     }
-    timeoutId = setTimeout(() => {
-        fetchData(ev.target.value)
-    }, 1000)
 }
 
-input.addEventListener('input', onInput)
+const onInput = (ev) => {
+    fetchData(ev.target.value)
+}
+
+input.addEventListener('input', debounce(onInput, 500))
