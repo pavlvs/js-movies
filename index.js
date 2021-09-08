@@ -63,27 +63,27 @@ root.innerHTML = /*html*/ `
     <input type="text" class="input" />
     <div class="dropdown">
         <div class="dropdown-menu">
-            <div class="dropdown-content results">
-
-            </div>
+            <div class="dropdown-content results"></div>
         </div>
     </div>
 `
 
 const input = document.querySelector('input')
 const dropdown = document.querySelector('.dropdown')
-const resultsWrapper = document.querySelector('.results')
+const resultsWrapper = document.querySelector('.results') // cf⇥ const arrow function assignment
 
 const onInput = async (ev) => {
     const movies = await fetchData(ev.target.value)
 
+    resultsWrapper.innerHTML = ''
     dropdown.classList.add('is-active')
     for (let movie of movies) {
         const option = document.createElement('a')
+        const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster
 
         option.classList.add('dropdown-item')
         option.innerHTML = /*html*/ `
-        <img src="${movie.Poster}" alt="" />
+        <img src="${imgSrc}" alt="" />
         ${movie.Title}
         `
         resultsWrapper.appendChild(option)
@@ -91,3 +91,9 @@ const onInput = async (ev) => {
 }
 
 input.addEventListener('input', debounce(onInput, 500))
+
+document.addEventListener('click', (event) => {
+    if (!root.contains(event.target)) {
+        dropdown.classList.remove('is-active')
+    }
+})
