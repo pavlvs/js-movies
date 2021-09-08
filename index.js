@@ -1,10 +1,17 @@
 // cf⇥ const arrow function assignment
 
+// ta⇥ ternary statement
+// fl⇥ for loop (ES6)
+// fo⇥ for of loop (ES6)
+// ife⇥ else statement
+// tc⇥ try/catch
+
 // ae⇥ addEventListener
 // gi⇥ getElementById
 // gt⇥ getElementsByTagName
 // qs⇥ querySelector
 // cel⇥ createElement
+// heac⇥ appendChild
 // hect⇥ classList.toggle
 // hega⇥ getAttribute
 // hesa⇥ setAttribute
@@ -42,25 +49,22 @@ const fetchData = async (searchTerm) => {
         },
     })
 
-    console.log(response.data)
+    return response.data.Search
 }
 
 const input = document.querySelector('input')
 
-const debounce = (func, delay = 1000) => {
-    let timeoutId
-    return (...arg) => {
-        if (timeoutId) {
-            clearTimeout(timeoutId)
-        }
-        timeoutId = setTimeout(() => {
-            func.apply(null, arg)
-        }, delay)
-    }
-}
+const onInput = async (ev) => {
+    const movies = await fetchData(ev.target.value)
+    for (let movie of movies) {
+        const div = document.createElement('div')
 
-const onInput = (ev) => {
-    fetchData(ev.target.value)
+        div.innerHTML = /*html*/ `
+        <img src="${movie.Poster}" alt="" />
+        <h1>${movie.Title}</h1>
+        `
+        document.querySelector('#target').appendChild(div)
+    }
 }
 
 input.addEventListener('input', debounce(onInput, 500))
