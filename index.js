@@ -67,6 +67,7 @@ const autoCompleteConfig = {
         return response.data.Search
     },
 }
+
 createAutoComplete({
     ...autoCompleteConfig,
     root: document.querySelector('#left-autocomplete'),
@@ -75,6 +76,7 @@ createAutoComplete({
         onMovieSelect(movie, document.querySelector('#left-summary'), 'left')
     },
 })
+
 createAutoComplete({
     ...autoCompleteConfig,
     root: document.querySelector('#right-autocomplete'),
@@ -113,11 +115,27 @@ const runComparison = () => {
 }
 
 const movieTemplate = (movieDetail) => {
+    const dollars = parseInt(
+        movieDetail.BoxOffice.replace(/\$/g, '').replace(/,/g, '')
+    )
+    const metascore = parseInt(movieDetail.Metascore)
+    const imdbRating = parseFloat(movieDetail.imdbRating)
+    const imdbVotes = parseInt(movieDetail.imdbVotes.replace(/,/g, ''))
+
+    const awards = movieDetail.Awards.split(' ').reduce((prev, word) => {
+        const value = parseInt(word)
+        if (isNaN(value)) {
+            return prev
+        } else {
+            return prev + value
+        }
+    }, 0)
+
     return /*html*/ `
         <article class="media">
-        <figure class="media-left">
-            <p class="image"><img src="${movieDetail.Poster}" alt="" /></p>
-        </figure>
+            <figure class="media-left">
+                <p class="image"><img src="${movieDetail.Poster}" alt="" /></p>
+            </figure>
             <div class="media-content">
                 <div class="content">
                 <h1>${movieDetail.Title}</h1>
